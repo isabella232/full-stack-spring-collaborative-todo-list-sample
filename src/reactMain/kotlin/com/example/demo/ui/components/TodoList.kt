@@ -7,7 +7,6 @@ import react.*
 import react.dom.li
 import react.dom.ul
 
-@JsExport
 class TodoList : RComponent<TodoListProps, TodoListState>() {
 
     override fun componentWillMount() {
@@ -65,14 +64,14 @@ class TodoList : RComponent<TodoListProps, TodoListState>() {
 
 }
 
-external interface TodoListProps : RProps {
+external interface TodoListProps : Props {
     var removeTodo: (Todo) -> Unit
     var updateTodo: (Todo) -> Unit
     var todos: List<Todo>
     var filter: TodoFilter
 }
 
-class TodoListState(var editingIdx: Int) : RState
+class TodoListState(var editingIdx: Int) : State
 
 fun RBuilder.todoList(
     removeTodo: (Todo) -> Unit,

@@ -5,13 +5,20 @@ import kotlinx.html.js.onClickFunction
 import com.example.demo.model.TodoFilter
 import react.RBuilder
 import react.RComponent
-import react.RProps
-import react.RState
 import react.dom.*
 import com.example.demo.utils.pluralize
+import react.Props
+import react.State
 
-@JsExport
-class TodoBar : RComponent<TodoBar.Props, RState>() {
+external interface TodoBarProps : Props {
+    var pendingCount: Int
+    var anyCompleted: Boolean
+    var clearCompleted: () -> Unit
+    var updateFilter: (TodoFilter) -> Unit
+    var currentFilter: TodoFilter
+}
+
+class TodoBar : RComponent<TodoBarProps, State>() {
 
     override fun RBuilder.render() {
         footer("footer") {
@@ -58,13 +65,6 @@ class TodoBar : RComponent<TodoBar.Props, RState>() {
             attrs.onClickFunction = { props.updateFilter(filter) }
         }
     }
-
-    class Props(var pendingCount: Int,
-                var anyCompleted: Boolean,
-                var clearCompleted: () -> Unit,
-                var updateFilter: (TodoFilter) -> Unit,
-                var currentFilter: TodoFilter
-    ) : RProps
 }
 
 fun RBuilder.todoBar(pendingCount: Int, anyCompleted: Boolean, clearCompleted: () -> Unit, currentFilter: TodoFilter, updateFilter: (TodoFilter) -> Unit) = child(TodoBar::class) {

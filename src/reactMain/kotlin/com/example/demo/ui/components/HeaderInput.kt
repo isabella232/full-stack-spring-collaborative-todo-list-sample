@@ -13,8 +13,15 @@ import com.example.demo.utils.Keys
 import com.example.demo.utils.translate
 import com.example.demo.utils.value
 
-@JsExport
-class HeaderInput : RComponent<HeaderInput.Props, HeaderInput.State>() {
+external interface HeaderInputProps : Props {
+    var create: (Todo) -> Unit
+}
+
+external interface HeaderInputState : State {
+    var title: String
+}
+
+class HeaderInput : RComponent<HeaderInputProps, HeaderInputState>() {
 
     override fun componentWillMount() {
         setState {
@@ -58,9 +65,6 @@ class HeaderInput : RComponent<HeaderInput.Props, HeaderInput.State>() {
             }
         }
     }
-
-    class Props(var create: (Todo) -> Unit) : RProps
-    class State(var title: String) : RState
 }
 
 fun RBuilder.headerInput(create: (Todo) -> Unit) = child(HeaderInput::class) {

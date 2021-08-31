@@ -11,8 +11,8 @@ import react.*
 import react.dom.*
 import com.example.demo.utils.Keys
 import com.example.demo.utils.value
+import kotlinx.html.Tag
 
-@JsExport
 class TodoItem : RComponent<TodoItemProps, TodoItemState>() {
 
     override fun componentWillMount() {
@@ -91,7 +91,7 @@ class TodoItem : RComponent<TodoItemProps, TodoItemState>() {
 
 }
 
-external interface TodoItemProps : RProps {
+external interface TodoItemProps : Props {
     var todo: Todo
     var editing: Boolean
     var removeTodo: () -> Unit
@@ -99,7 +99,7 @@ external interface TodoItemProps : RProps {
     var endEditing: () -> Unit
 }
 
-external interface TodoItemState : RState {
+external interface TodoItemState : State {
     var editText: String
     var checked: Boolean
 }
@@ -116,4 +116,12 @@ fun RBuilder.todoItem(
     attrs.removeTodo = removeTodo
     attrs.updateTodo = updateTodo
     attrs.endEditing = endEditing
+}
+
+fun <T: Tag> RDOMBuilder<T>.ref(handler: (dynamic) -> Unit) {
+    domProps.ref(handler)
+}
+
+fun <T> Props.ref(ref: (T?) -> Unit) {
+    asDynamic().ref = ref
 }

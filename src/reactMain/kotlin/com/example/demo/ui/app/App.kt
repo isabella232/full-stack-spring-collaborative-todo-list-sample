@@ -29,7 +29,6 @@ object AppOptions {
     var localStorageKey = "todos-koltin-react"
 }
 
-@JsExport
 @ExperimentalMetadataApi
 class App(props: AppProps) : RComponent<AppProps, AppState>(props) {
 
@@ -108,7 +107,7 @@ class App(props: AppProps) : RComponent<AppProps, AppState>(props) {
     }
 
     private fun updateFilter(newFilter: TodoFilter) {
-        document.location!!.href = "#?route=${newFilter.name.toLowerCase()}"
+        document.location!!.href = "#?route=${newFilter.name.lowercase()}"
     }
 
     private fun countPending() = pendingTodos().size
@@ -169,11 +168,11 @@ class App(props: AppProps) : RComponent<AppProps, AppState>(props) {
 }
 
 
-external interface AppState : RState {
+external interface AppState : State {
     var todos: List<Todo>
 }
 
-external interface AppProps : RProps {
+external interface AppProps : Props {
     var route: String
     var client: Client
     var service: TodoService

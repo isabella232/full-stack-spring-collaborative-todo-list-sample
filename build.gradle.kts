@@ -1,13 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("multiplatform") version "1.5.20"
-    kotlin("plugin.serialization") version "1.5.20"
+    kotlin("multiplatform") version "1.5.30"
+    kotlin("plugin.serialization") version "1.5.30"
 
     id("org.springframework.boot") version "2.5.2" apply false
     id("io.spring.dependency-management") version "1.0.11.RELEASE"  apply false
 
-    kotlin("plugin.spring") version "1.5.20"  apply false
+    kotlin("plugin.spring") version "1.5.30"  apply false
 }
 
 group = "com.example"
@@ -53,7 +53,7 @@ kotlin {
                 implementation("com.benasher44:uuid:0.3.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-html:0.7.3")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.2.1")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
             }
         }
         val commonTest by getting {
@@ -73,9 +73,9 @@ kotlin {
             dependsOn(commonMain)
             dependsOn(commonClientMain)
             dependencies {
-                implementation("io.ktor:ktor-client-js:1.6.1")
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.214-kotlin-1.5.20")
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:17.0.2-pre.214-kotlin-1.5.20")
+                implementation("io.ktor:ktor-client-js:1.6.3")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.239-kotlin-1.5.30")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:17.0.2-pre.239-kotlin-1.5.30")
 
                 implementation(npm("todomvc-app-css", "2.0.0"))
                 implementation(npm("todomvc-common", "1.0.0"))
