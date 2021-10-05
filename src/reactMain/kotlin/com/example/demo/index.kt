@@ -8,11 +8,9 @@ import com.example.demo.service.TodoService
 import kotlinext.js.require
 import kotlinext.js.requireAll
 import kotlinx.browser.document
-import kotlinx.browser.window
-import org.w3c.dom.events.EventListener
 import react.dom.render
 import com.example.demo.repository.LocalStorageTodoRepository
-import kotlin.collections.set
+import react.router.dom.BrowserRouter
 
 
 suspend fun main(args: Array<String>) {
@@ -22,44 +20,11 @@ suspend fun main(args: Array<String>) {
     val client = RSocketClient.create()
     val service = TodoService(LocalStorageTodoRepository())
 
-    fun render(route: String = "list", parameters: Map<String, String>) {
-        render(document.getElementById("root")) {
-            app(route, client, service)
+    render(document.getElementById("root")) {
+        BrowserRouter {
+            app(client, service)
         }
     }
-
-    fun renderByUrl() {
-        val href = window.location.href
-
-        if (!href.contains("?")) {
-            render(parameters = emptyMap())
-            return
-        }
-
-        val parametersString = href.split("?")[1]
-        val parameters = parametersString.split("&")
-
-        val map = mutableMapOf<String, String>()
-        parameters.forEach { parameterString ->
-            if (parameterString.contains("=")) {
-                val params = parameterString.split("=")
-                map[params[0]] = params[1]
-            }
-        }
-
-        val route = map["route"]
-        if (route != null) {
-            render(route = route, parameters = map)
-        } else {
-            render(parameters = map)
-        }
-    }
-
-    window.addEventListener("hashchange", EventListener {
-        renderByUrl()
-    })
-
-    renderByUrl()
 
 }
 

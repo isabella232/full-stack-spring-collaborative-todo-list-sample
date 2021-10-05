@@ -9,12 +9,12 @@ import react.Props
 import react.RBuilder
 import react.dom.*
 import react.functionComponent
+import react.router.dom.Link
 
 external interface TodoBarProps : Props {
     var pendingCount: Int
     var anyCompleted: Boolean
     var clearCompleted: () -> Unit
-    var updateFilter: (TodoFilter) -> Unit
     var currentFilter: TodoFilter
 }
 
@@ -25,9 +25,14 @@ private fun RDOMBuilder<LI>.filterItem(props: TodoBarProps, filter: TodoFilter, 
         ""
     }
 
-    a(classes = classes) {
+    Link {
         +text
-        attrs.onClickFunction = { props.updateFilter(filter) }
+        attrs.className = classes
+        attrs.to = when(filter) {
+            TodoFilter.ANY -> "/?route=any"
+            TodoFilter.COMPLETED -> "/?route=completed"
+            TodoFilter.PENDING -> "/?route=pending"
+        }
     }
 }
 
@@ -70,11 +75,9 @@ fun RBuilder.todoBar(
     anyCompleted: Boolean,
     clearCompleted: () -> Unit,
     currentFilter: TodoFilter,
-    updateFilter: (TodoFilter) -> Unit,
 ) = child(TodoBar) {
     attrs.pendingCount = pendingCount
     attrs.clearCompleted = clearCompleted
     attrs.anyCompleted = anyCompleted
-    attrs.updateFilter = updateFilter
     attrs.currentFilter = currentFilter
 }

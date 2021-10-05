@@ -11,29 +11,32 @@ import com.example.demo.ui.components.info
 import com.example.demo.ui.components.todoBar
 import com.example.demo.ui.components.todoList
 import com.example.demo.utils.translate
-import kotlinx.browser.document
 import kotlinx.html.InputType
 import kotlinx.html.id
 import kotlinx.html.js.onChangeFunction
 import kotlinx.html.title
 import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.url.URLSearchParams
 import react.*
 import react.dom.attrs
 import react.dom.input
 import react.dom.label
 import react.dom.section
+import react.router.dom.useLocation
 
 object AppOptions {
     var language = "no-language"
     var localStorageKey = "todos-koltin-react"
 }
 
+fun useQuery(): URLSearchParams = URLSearchParams(useLocation().search)
+
 private val App: FC<AppProps> = functionComponent { props ->
     val (todos, setTodos) = useState(emptyList<Todo>())
+    val query = useQuery()
 
     useEffect(dependencies = emptyArray()) {
         props.client.handleTodos {
-            console.log("123123123123123")
             props.service.handleEvent(it)
             setTodos( props.service.listTodos())
         }
@@ -41,10 +44,6 @@ private val App: FC<AppProps> = functionComponent { props ->
 
     fun pendingTodos(): List<Todo> {
         return todos.filter { todo -> !todo.completed }
-    }
-
-    fun updateFilter(newFilter: TodoFilter) {
-        document.location!!.href = "#?route=${newFilter.name.lowercase()}"
     }
 
     fun countPending() = pendingTodos().size
@@ -90,7 +89,7 @@ private val App: FC<AppProps> = functionComponent { props ->
         }
     }
 
-    val currentFilter = when (props.route) {
+    val currentFilter = when (query.get("route")) {
         "pending" -> TodoFilter.PENDING
         "completed" -> TodoFilter.COMPLETED
         else -> TodoFilter.ANY
@@ -130,7 +129,6 @@ private val App: FC<AppProps> = functionComponent { props ->
                 anyCompleted = todos.any { todo -> todo.completed },
                 clearCompleted = ::clearCompleted,
                 currentFilter = currentFilter,
-                updateFilter = ::updateFilter
             )
         }
 
@@ -139,13 +137,11 @@ private val App: FC<AppProps> = functionComponent { props ->
 }
 
 external interface AppProps : Props {
-    var route: String
     var client: Client
     var service: TodoService
 }
 
-fun RBuilder.app(route: String, client: Client, service: TodoService) = child(App) {
-    attrs.route = route
+fun RBuilder.app(client: Client, service: TodoService) = child(App) {
     attrs.client = client
     attrs.service = service
 }

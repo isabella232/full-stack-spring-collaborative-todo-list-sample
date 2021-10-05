@@ -74,8 +74,9 @@ kotlin {
             dependsOn(commonClientMain)
             dependencies {
                 implementation("io.ktor:ktor-client-js:1.6.4")
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.251-kotlin-1.5.31")
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:17.0.2-pre.251-kotlin-1.5.31")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react:17.0.2-pre.252-kotlin-1.5.31")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:17.0.2-pre.252-kotlin-1.5.31")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-router-dom:5.2.0-pre.252-kotlin-1.5.31")
 
                 implementation(npm("todomvc-app-css", "2.0.0"))
                 implementation(npm("todomvc-common", "1.0.0"))
