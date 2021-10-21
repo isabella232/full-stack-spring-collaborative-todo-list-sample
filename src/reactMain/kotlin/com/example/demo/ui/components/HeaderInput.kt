@@ -17,19 +17,9 @@ external interface HeaderInputProps : Props {
     var create: (Todo) -> Unit
 }
 
-external interface HeaderInputState : State {
-    var title: String
-}
+private val HeaderInput : FC<HeaderInputProps> = functionComponent { props ->
+    val (title, setTitle) = useState("")
 
-class HeaderInput : RComponent<HeaderInputProps, HeaderInputState>() {
-
-    override fun componentWillMount() {
-        setState {
-            title = ""
-        }
-    }
-
-    override fun RBuilder.render() {
         header(classes = "header") {
             h1 {
                 +"todos".translate()
@@ -38,35 +28,29 @@ class HeaderInput : RComponent<HeaderInputProps, HeaderInputState>() {
                 attrs {
                     autoFocus = true
                     placeholder = "What needs to be done?".translate()
-                    value = state.title
+                    value = title
 
                     onChangeFunction = { event ->
                         val newValue = event.value
-
-                        setState {
-                            title = newValue
-                        }
+                        setTitle(newValue)
                     }
 
                     onKeyDownFunction = { keyEvent ->
                         val key = Keys.fromString(keyEvent.asDynamic().key as String)
 
                         if (key == Keys.Enter) {
-                            if (state.title.isNotBlank()) {
-                                props.create(Todo(title = state.title.trim()))
+                            if (title.isNotBlank()) {
+                                props.create(Todo(title = title.trim()))
                             }
-
-                            setState {
-                                title = ""
-                            }
+                            setTitle("")
                         }
                     }
                 }
             }
         }
-    }
+
 }
 
-fun RBuilder.headerInput(create: (Todo) -> Unit) = child(HeaderInput::class) {
+fun RBuilder.headerInput(create: (Todo) -> Unit) = child(HeaderInput) {
     attrs.create = create
 }
