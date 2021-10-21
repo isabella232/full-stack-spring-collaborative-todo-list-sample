@@ -22,6 +22,8 @@ import kotlinx.serialization.json.Json
 @OptIn(ExperimentalMetadataApi::class)
 class RSocketClient(val rsocket: RSocket) : Client {
 
+    val scope = MainScope()
+    
     override fun handleTodos(handler: (TodoEvent) -> Unit) {
         rsocket
             .requestStream(buildPayload {
@@ -35,11 +37,11 @@ class RSocketClient(val rsocket: RSocket) : Client {
             .onEach {
                 handler(it)
             }
-            .launchIn(MainScope())
+            .launchIn(scope)
     }
 
     override fun exchange(todo: List<Todo>) {
-        MainScope().launch {
+        scope.launch {
             todo.forEach {
                 rsocket
                     .fireAndForget(buildPayload {
@@ -51,7 +53,7 @@ class RSocketClient(val rsocket: RSocket) : Client {
     }
 
     override fun addTodo(todo: Todo) {
-        MainScope().launch {
+        scope.launch {
             rsocket
                 .fireAndForget(buildPayload {
                     data(Json.encodeToString<Todo>(todo))
@@ -61,7 +63,7 @@ class RSocketClient(val rsocket: RSocket) : Client {
     }
 
     override fun updateTodo(todo: Todo) {
-        MainScope().launch {
+        scope.launch {
             rsocket
                 .fireAndForget(buildPayload {
                     data(Json.encodeToString<Todo>(todo))
@@ -71,7 +73,7 @@ class RSocketClient(val rsocket: RSocket) : Client {
     }
 
     override fun removeTodo(todo: Todo) {
-        MainScope().launch {
+        scope.launch {
             rsocket
                 .fireAndForget(buildPayload {
                     data(Json.encodeToString<Todo>(todo))
